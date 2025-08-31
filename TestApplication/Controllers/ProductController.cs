@@ -33,4 +33,11 @@ public class ProductController(IProductService productService) : ControllerBase
 
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem(StatusCodes.Status404NotFound);
     }
+
+    [HttpGet("productId")]
+    public async Task<IActionResult> GetProduct(int ProductId,int shopId)
+    {
+        var result = await ProductService.GetproductAsync(ProductId,shopId);
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem(StatusCodes.Status404NotFound);
+    }
 }

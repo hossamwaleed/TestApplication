@@ -9,6 +9,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Shop> Shop { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Order> orders { get; set; }
+    public DbSet<FavouriteItem> favouriteItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

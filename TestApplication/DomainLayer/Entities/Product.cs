@@ -16,8 +16,11 @@ public class Product
     public bool hasDiscount { get; set; }= false;
 
     public decimal? priceAfterDiscount {  get; set; }
+
+    public int Stock { get; set; }
     public int ShopId { get; set; }
     public Shop shop { get; set; }
 
-    
+    public ICollection<FavouriteItem> favouriteItems { get; set; }
+    public ICollection<OrderItem> orderItems { get; set;}
 }

@@ -9,4 +9,5 @@ public interface IProductService
 {
     Task<Result> addproductasync(int shopid, [FromForm] ProductRequest request, CancellationToken cancellationtoken);
     Task<Result<PaginatedList<ProductResponse>>> GetAllAsync(int shopId,requestFilters filters ,CancellationToken cancellationToken);
+    public Task<Result<ProductResponse>> GetproductAsync(int productId,int shopId);
 }

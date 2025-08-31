@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestApplication.InfrastructureLayer.Persistence;
 
@@ -11,9 +12,11 @@ using TestApplication.InfrastructureLayer.Persistence;
 namespace TestApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250820155512_addFavouriteItemTable")]
+    partial class addFavouriteItemTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,49 +251,6 @@ namespace TestApplication.Migrations
                     b.ToTable("favouriteItems");
                 });
 
-            modelBuilder.Entity("TestApplication.DomainLayer.Entities.Order", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("orders");
-                });
-
-            modelBuilder.Entity("TestApplication.DomainLayer.Entities.OrderItem", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "OrderId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItem");
-                });
-
             modelBuilder.Entity("TestApplication.DomainLayer.Entities.Product", b =>
                 {
                     b.Property<int>("id")
@@ -309,9 +269,6 @@ namespace TestApplication.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Stock")
                         .HasColumnType("int");
 
                     b.Property<bool>("hasDiscount")
@@ -468,34 +425,6 @@ namespace TestApplication.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TestApplication.DomainLayer.Entities.Order", b =>
-                {
-                    b.HasOne("TestApplication.DomainLayer.Entities.ApplicationUser", "User")
-                        .WithMany("orders")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TestApplication.DomainLayer.Entities.OrderItem", b =>
-                {
-                    b.HasOne("TestApplication.DomainLayer.Entities.Order", "Order")
-                        .WithMany("orderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TestApplication.DomainLayer.Entities.Product", "Product")
-                        .WithMany("orderItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("TestApplication.DomainLayer.Entities.Product", b =>
                 {
                     b.HasOne("TestApplication.DomainLayer.Entities.Shop", "shop")
@@ -535,20 +464,11 @@ namespace TestApplication.Migrations
             modelBuilder.Entity("TestApplication.DomainLayer.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("favouriteItems");
-
-                    b.Navigation("orders");
-                });
-
-            modelBuilder.Entity("TestApplication.DomainLayer.Entities.Order", b =>
-                {
-                    b.Navigation("orderItems");
                 });
 
             modelBuilder.Entity("TestApplication.DomainLayer.Entities.Product", b =>
                 {
                     b.Navigation("favouriteItems");
-
-                    b.Navigation("orderItems");
                 });
 
             modelBuilder.Entity("TestApplication.DomainLayer.Entities.Shop", b =>

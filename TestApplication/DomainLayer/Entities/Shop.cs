@@ -9,4 +9,5 @@ public sealed class Shop
     public ShopLocation Location { get; set; }
 
     public ICollection<Product> Products { get; set; }
+    
 }

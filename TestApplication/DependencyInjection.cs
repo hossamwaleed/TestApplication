@@ -24,6 +24,8 @@ public static class DependencyInjection
         mappingConfig.Scan(Assembly.GetExecutingAssembly());
         services.AddScoped<IShopService,ShopService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IFavouriteItemService, FavouriteItemService>();
         services.AddHttpContextAccessor();
         var ConnectionString = configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidOperationException("ConnectionString DefaultConnection NotFound");

@@ -7,7 +7,7 @@ public record ProductRequest
     string Description,
     IFormFile image,
     decimal price,
-    bool hasDiscount
-  
+    bool hasDiscount,
+     int Stock
     
     ); 

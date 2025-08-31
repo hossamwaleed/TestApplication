@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using TestApplication.ApplicationLayer.abstractions;
 using TestApplication.Contracts.Common;
@@ -40,8 +41,17 @@ public class ProductService (ApplicationDbContext context,IWebHostEnvironment we
 
         var product = request.Adapt<Product>();
         product.ShopId = shopid;
-        product.priceAfterDiscount = priceAfterDiscount;
+    
         product.image = request.image.FileName;
+        product.Stock= request.Stock;
+        if(product.hasDiscount is true)
+        {
+            product.priceAfterDiscount = priceAfterDiscount;
+        }
+        else
+        {
+            product.priceAfterDiscount = product.price;
+        }
         var addProduct = await Context.AddAsync(product,cancellationtoken);
 
         await Context.SaveChangesAsync();
@@ -68,5 +78,14 @@ public class ProductService (ApplicationDbContext context,IWebHostEnvironment we
         var response = await PaginatedList<ProductResponse>.CreateAsync(products, filters.PageNumber, filters.PageSize);
 
         return Result.Success  (response);
-    } 
+    }
+    public async Task<Result<ProductResponse>> GetproductAsync(int productId,int shopId)
+    {
+        var Product = await Context.Products.Where(x=>x.id==productId & x.ShopId==shopId).ProjectToType<ProductResponse>().AsNoTracking().SingleOrDefaultAsync();
+
+    
+
+
+        return Product is null ? Result.Failure<ProductResponse>(ProductError.productNotExist) : Result.Success(Product.Adapt<ProductResponse>());
+    }
 }
